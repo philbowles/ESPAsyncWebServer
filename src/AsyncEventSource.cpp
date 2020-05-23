@@ -178,7 +178,7 @@ AsyncEventSourceClient::~AsyncEventSourceClient(){
 }
 
 void AsyncEventSourceClient::_queueMessage(AsyncEventSourceMessage *dataMessage){
-  Serial.printf("T=%u *************** AsyncEventSourceClient::_queueMessage %d\n",millis(),_messageQueue.length());
+  //Serial.printf("T=%u *************** AsyncEventSourceClient::_queueMessage %d\n",millis(),_messageQueue.length());
   if(dataMessage == NULL)
     return;
   if(!connected()){
@@ -218,7 +218,7 @@ void AsyncEventSourceClient::_onPoll(){
 
 void AsyncEventSourceClient::_onTimeout(uint32_t time __attribute__((unused))){
 //  _client->close(true); - Too harsh! breaks webui
-    Serial.printf("T=%u _onTimeout Q=%d\n",millis(),_messageQueue.length());
+//    Serial.printf("T=%u _onTimeout Q=%d\n",millis(),_messageQueue.length());
     _messageQueue.remove(_messageQueue.front()); // much softer
     _runQueue(); // everything carries on working
 }
