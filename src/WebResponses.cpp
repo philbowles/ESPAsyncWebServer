@@ -36,6 +36,7 @@ void* memchr(void* ptr, int ch, size_t count)
 /*
  * Abstract Response
  * */
+/*
 const char* AsyncWebServerResponse::_responseCodeToString(int code) {
   switch (code) {
     case 100: return "Continue";
@@ -81,7 +82,7 @@ const char* AsyncWebServerResponse::_responseCodeToString(int code) {
     default:  return "";
   }
 }
-
+*/
 AsyncWebServerResponse::AsyncWebServerResponse()
   : _code(0)
   , _headers(LinkedList<AsyncWebHeader *>([](AsyncWebHeader *h){ delete h; }))
@@ -133,7 +134,8 @@ String AsyncWebServerResponse::_assembleHead(uint8_t version){
   int bufSize = 300;
   char buf[bufSize];
 
-  snprintf(buf, bufSize, "HTTP/1.%d %d %s\r\n", version, _code, _responseCodeToString(_code));
+//  snprintf(buf, bufSize, "HTTP/1.%d %d %s\r\n", version, _code, _responseCodeToString(_code));
+  snprintf(buf, bufSize, "HTTP/1.%d %d\r\n", version, _code);
   out.concat(buf);
 
   if(_sendContentLength) {
