@@ -190,12 +190,14 @@ void AsyncEventSourceClient::_queueMessage(AsyncEventSourceMessage *dataMessage)
       ets_printf("ERROR: Too many messages queued\n");
       delete dataMessage;
   } else {
-*/
+
       _messageQueue.add(dataMessage);
       
-//  }
-//  if(_client->canSend()) _runQueue();
-  _runQueue();
+  }
+  */
+  _messageQueue.add(dataMessage);
+  if(_client->canSend()) _runQueue();
+//  _runQueue();
 }
 
 void AsyncEventSourceClient::_onAck(size_t len, uint32_t time){
@@ -374,4 +376,3 @@ size_t AsyncEventSourceResponse::_ack(AsyncWebServerRequest *request, size_t len
   }
   return 0;
 }
-
