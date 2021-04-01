@@ -178,30 +178,18 @@ AsyncEventSourceClient::~AsyncEventSourceClient(){
 }
 
 void AsyncEventSourceClient::_queueMessage(AsyncEventSourceMessage *dataMessage){
-  //Serial.printf("T=%u *************** AsyncEventSourceClient::_queueMessage %d\n",millis(),_messageQueue.length());
   if(dataMessage == NULL)
     return;
   if(!connected()){
     delete dataMessage;
     return;
   }
-  /*
-  if(_messageQueue.length() >= SSE_MAX_QUEUED_MESSAGES){
-      ets_printf("ERROR: Too many messages queued\n");
-      delete dataMessage;
-  } else {
 
-      _messageQueue.add(dataMessage);
-      
-  }
-  */
   _messageQueue.add(dataMessage);
-  if(_client->canSend()) _runQueue();
-//  _runQueue();
+  _runQueue();
 }
 
 void AsyncEventSourceClient::_onAck(size_t len, uint32_t time){
-//  Serial.printf("AsyncEventSourceClient::_onAck %d\n",_messageQueue.length());
   while(len && !_messageQueue.isEmpty()){
     len = _messageQueue.front()->ack(len, time);
     if(_messageQueue.front()->finished())
@@ -212,7 +200,6 @@ void AsyncEventSourceClient::_onAck(size_t len, uint32_t time){
 }
 
 void AsyncEventSourceClient::_onPoll(){
-//  Serial.printf("AsyncEventSourceClient::_onPoll %d\n",_messageQueue.length());
   if(!_messageQueue.isEmpty()){
     _runQueue();
   }
@@ -220,7 +207,6 @@ void AsyncEventSourceClient::_onPoll(){
 
 void AsyncEventSourceClient::_onTimeout(uint32_t time __attribute__((unused))){
 //  _client->close(true); - Too harsh! breaks webui
-//    Serial.printf("T=%u _onTimeout Q=%d\n",millis(),_messageQueue.length());
     _messageQueue.remove(_messageQueue.front()); // much softer
     _runQueue(); // everything carries on working
 }
@@ -236,7 +222,6 @@ void AsyncEventSourceClient::close(){
 }
 
 void AsyncEventSourceClient::write(const char * message, size_t len){
-//    Serial.printf("AsyncEventSourceClient::write %s\n",message);
   _queueMessage(new AsyncEventSourceMessage(message, len));
 }
 
@@ -246,7 +231,6 @@ void AsyncEventSourceClient::send(const char *message, const char *event, uint32
 }
 
 void AsyncEventSourceClient::_runQueue(){
-//  Serial.printf("AsyncEventSourceClient::_runQueue %d\n",_messageQueue.length());
   while(!_messageQueue.isEmpty() && _messageQueue.front()->finished()){
     _messageQueue.remove(_messageQueue.front());
   }
@@ -325,7 +309,6 @@ size_t AsyncEventSource::avgPacketsWaiting() const {
 void AsyncEventSource::send(const char *message, const char *event, uint32_t id, uint32_t reconnect){
 
   String ev = generateEventMessage(message, event, id, reconnect);
-//  Serial.printf("AsyncEventSource::send %s\n",ev.c_str());
   for(const auto &c: _clients){
     if(c->connected()) {
       c->write(ev.c_str(), ev.length());

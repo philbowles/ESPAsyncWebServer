@@ -108,16 +108,6 @@ class AsyncChunkedResponse: public AsyncAbstractResponse {
     virtual size_t _fillBuffer(uint8_t *buf, size_t maxLen) override;
 };
 
-class AsyncProgmemResponse: public AsyncAbstractResponse {
-  private:
-    const uint8_t * _content;
-    size_t _readLength;
-  public:
-    AsyncProgmemResponse(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback=nullptr);
-    bool _sourceValid() const { return true; }
-    virtual size_t _fillBuffer(uint8_t *buf, size_t maxLen) override;
-};
-
 class cbuf;
 
 class AsyncResponseStream: public AsyncAbstractResponse, public Print {

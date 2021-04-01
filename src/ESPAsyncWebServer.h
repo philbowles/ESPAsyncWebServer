@@ -25,7 +25,6 @@
 
 #include <functional>
 #include "FS.h"
-//#include "LittleFS.h"
 
 #include "StringArray.h"
 
@@ -466,7 +465,6 @@ public:
 
 #include "WebResponseImpl.h"
 #include "WebHandlerImpl.h"
-#include "AsyncWebSocket.h"
 #include "AsyncEventSource.h"
 
 #endif /* _AsyncWebServer_H_ */

@@ -760,10 +760,6 @@ AsyncResponseStream * AsyncWebServerRequest::beginResponseStream(const String& c
   return new AsyncResponseStream(contentType, bufferSize);
 }
 
-AsyncWebServerResponse * AsyncWebServerRequest::beginResponse_P(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback){
-  return new AsyncProgmemResponse(code, contentType, content, len, callback);
-}
-
 AsyncWebServerResponse * AsyncWebServerRequest::beginResponse_P(int code, const String& contentType, PGM_P content, AwsTemplateProcessor callback){
   return beginResponse_P(code, contentType, (const uint8_t *)content, strlen_P(content), callback);
 }

@@ -640,31 +640,6 @@ size_t AsyncChunkedResponse::_fillBuffer(uint8_t *data, size_t len){
 }
 
 /*
- * Progmem Response
- * */
-
-AsyncProgmemResponse::AsyncProgmemResponse(int code, const String& contentType, const uint8_t * content, size_t len, AwsTemplateProcessor callback): AsyncAbstractResponse(callback) {
-  _code = code;
-  _content = content;
-  _contentType = contentType;
-  _contentLength = len;
-  _readLength = 0;
-}
-
-size_t AsyncProgmemResponse::_fillBuffer(uint8_t *data, size_t len){
-  size_t left = _contentLength - _readLength;
-  if (left > len) {
-    memcpy_P(data, _content + _readLength, len);
-    _readLength += len;
-    return len;
-  }
-  memcpy_P(data, _content + _readLength, left);
-  _readLength += left;
-  return left;
-}
-
-
-/*
  * Response Stream (You can print/write/printf to it, up to the contentLen bytes)
  * */
 

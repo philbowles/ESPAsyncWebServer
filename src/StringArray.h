@@ -187,7 +187,4 @@ public:
   }
 };
 
-
-
-
 #endif /* STRINGARRAY_H_ */

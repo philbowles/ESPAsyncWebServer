@@ -24,10 +24,8 @@
 
 #ifdef ESP32
 #include <AsyncTCP.h>
-#define SSE_MAX_QUEUED_MESSAGES 64
 #else
 #include <ESPAsyncTCP.h>
-#define SSE_MAX_QUEUED_MESSAGES 32
 #endif
 
 #include <ESPAsyncWebServer.h>
@@ -54,12 +52,13 @@ typedef std::function<void(AsyncEventSourceClient *client)> ArEventHandlerFuncti
 
 class AsyncEventSourceMessage {
   private:
+  public:
     uint8_t * _data; 
     size_t _len;
     size_t _sent;
     //size_t _ack;
     size_t _acked; 
-  public:
+
     AsyncEventSourceMessage(const char * data, size_t len);
     ~AsyncEventSourceMessage();
     size_t ack(size_t len, uint32_t time __attribute__((unused)));
