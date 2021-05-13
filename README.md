@@ -38,7 +38,7 @@ What constitutes "*sensible and practical*" is up to the user, but some guidance
 
 The critical scarce resource in the SSE/Websockets issue is the amount of free heap. Messages can only be despatched / cleared by the underlying TCP lib at a certain rate which depends on a number of factors beyond your control:
 
-* Network speed / quality
+* Network speed / quality / latency
 * Implementation buffer size / quantity
 * User compile-time options re LwIP (mainly chaging the above point)
   
@@ -52,9 +52,9 @@ The difference between the LO and HI limits is to give a "hysteresis window" in 
 
 Two factors allow this to work and must be considered if implementing your own solution:
 
-1. You cannot do any of this in a "tight loop". The underlying TCP and AsyncWebserver code must be allow to run - or it can't clear the queue - making things worse. Thus *your* code needs to yield or exit or "do stuff" in a background timer / separate task etc to give those other libs "breathing space". [H4Plugins](https://github.com/philbowles/h4plugins) has this fuctionaility as an inherent part of its architecture, whcih is why this is a simple and "natural" solution for it, as long as...
+1. You cannot do any of this in a "tight loop". The underlying TCP and AsyncWebserver code must be allow to run - or it can't clear the queue - making things worse. Thus *your* code needs to yield or exit or "do stuff" in a background timer / separate task etc to give those other libs "breathing space". [H4Plugins](https://github.com/philbowles/h4plugins) has this fuctionality as an inherent part of its architecture, whcih is why this is a simple and "natural" solution for it, as long as...
 
-2. ...there exists a strategy to cope with / replace / restransmit / othwerwise manage the ignored messages. This will - by defintion - be app dedependent. In [H4Plugins](https://github.com/philbowles/h4plugins), SSE messages are used solely to keep the web UI up-do-date / in sync with the state of the app. Therefore When the heap has recovered back above the (presumably "safe") higher limit, any code that previously sent an ignored SSE now receives an event message telling it to send/re-sync its *current* state.
+2. ...there exists a strategy to cope with / replace / restransmit / othwerwise manage the ignored messages. This will - by defintion - be app-dependent. In [H4Plugins](https://github.com/philbowles/h4plugins), SSE messages are used solely to keep the web UI up-do-date / in sync with the state of the app. Therefore When the heap has recovered back above the (presumably "safe") higher limit, any code that previously sent an ignored SSE now receives an event message telling it to send/re-sync its *current* state.
    
 This means that while, say , a flashing LED may not have displayed several on-offs...once SSE messages can be sent again it will correctly show the way things *are now* even though it may not have accurately represented the way things *were* in the last couple of seconds. In the real world, unless a user happens to have been watching both like a hawk at the exact moment, no-one is going to notice anyway.
 
@@ -73,7 +73,7 @@ Be warned that this is ***not*** a straightforward drop-in replacement for a bug
 * All reference to JSON: waaaaaaaaay too heavy a lib.
 * All references to WebSockets
 
-I feel a little guilty about the last one (but only *a little*) as I know many people would love a fully-working async WebSockets server. Ironically (and even amsuing after a couple of years of trying to work round these problems) [H4Plugins](https://github.com/philbowles/h4plugins) only uses SSE as this author simply couldn't get WebSockets working all those years back without crashing the MCU :). Subsequent (investigation and much swearing and tearing out of hair) reveals it's the same high-school-newbie-quality hardcoded "fix" that causes the problem with both features. The method outlined above would also work fine for webSockets too, once the compounding ESPAsyncTCP bug is also factored out.
+I feel a little guilty about the last one (but only *a little*) as I know many people would love a fully-working async WebSockets server. Ironically (and even amusing after a couple of years of trying to work round these problems) [H4Plugins](https://github.com/philbowles/h4plugins) only uses SSE as this author simply couldn't get WebSockets working all those years back without crashing the MCU :). Subsequent investigation (and much swearing and tearing out of hair) reveals it's the same high-school-newbie-quality hardcoded "fix" that causes the problem with both features. The [H4Plugins](https://github.com/philbowles/h4plugins) flow-control method outlined above would also work fine for webSockets, once the compounding ESPAsyncTCP bug is also factored out.
 
 The sad truth is that I abandoned WebSockerts long ago, have no use for them myself (I use AJAX/SSE) and simply do not have the time to "save the world" by providing a public working replacement for *all* the bugs in ESPAsynWebserver. Sorry and all...I'm available for hire though. :)
 
