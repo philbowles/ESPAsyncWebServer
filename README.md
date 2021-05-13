@@ -75,7 +75,7 @@ Be warned that this is ***not*** a straightforward drop-in replacement for a bug
 
 I feel a little guilty about the last one (but only *a little*) as I know many people would love a fully-working async WebSockets server. Ironically (and even amusing after a couple of years of trying to work round these problems) [H4Plugins](https://github.com/philbowles/h4plugins) only uses SSE as this author simply couldn't get WebSockets working all those years back without crashing the MCU :). Subsequent investigation (and much swearing and tearing out of hair) reveals it's the same high-school-newbie-quality hardcoded "fix" that causes the problem with both features. The [H4Plugins](https://github.com/philbowles/h4plugins) flow-control method outlined above would also work fine for webSockets, once the compounding ESPAsyncTCP bug is also factored out.
 
-The sad truth is that I abandoned WebSockerts long ago, have no use for them myself (I use AJAX/SSE) and simply do not have the time to "save the world" by providing a public working replacement for *all* the bugs in ESPAsynWebserver. Sorry and all...I'm available for hire though. :)
+The sad truth is that I abandoned WebSockets long ago, have no use for them myself (I use AJAX/SSE) and simply do not have the time to "save the world" by providing a public working replacement for *all* the bugs in ESPAsynWebserver. Sorry and all...I'm available for hire though. :)
 
 ---
 
